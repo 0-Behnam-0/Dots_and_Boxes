@@ -7,3 +7,7 @@ print("____")
 # print("")
 print("\n")
 print("____")
+
+from math import ceil
+
+print(ceil(4/3))
