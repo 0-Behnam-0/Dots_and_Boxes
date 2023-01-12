@@ -1,10 +1,13 @@
-from math import ceil
+"""
+    TODO score def has bug in returning value
+"""
 
-rows = 6
-columns = 6
+rows = 3
+columns = 3
 
 # rows = int(input("Rows: "))
 # columns = int(input("Columns :"))
+
 list_size = (((rows*2)-1)*(columns-1)) + rows - 1
 
 bonus_houses = []
@@ -85,21 +88,18 @@ def game_map():
         counter = stack
         print()
         for k in range(columns):
+            house_id = "  "
             if str(base_elements[counter]).isnumeric():
-                if k+1 == columns:
-                    house_id = "  "
-                    print(str(base_elements[counter])+"  "+house_id+"   ", end="") if base_elements[counter] >= 10 else print("0"+str(base_elements[counter])+"  "+house_id+"   ", end="")
+                if k+1 == columns : print(str(base_elements[counter])+"  "+house_id+"   ", end="") if base_elements[counter] >= 10 else print("0"+str(base_elements[counter])+"  "+house_id+"   ", end="")
                 else:
                     house_id = str(bonus_houses[bonus_houses_counter]) if bonus_houses_counter>=9 else "0"+str(bonus_houses[bonus_houses_counter])
                     print(str(base_elements[counter])+"  "+house_id+"   ", end="") if base_elements[counter] >= 10 else print("0"+str(base_elements[counter])+"  "+house_id+"   ", end="")
                     bonus_houses_counter += 1
             else:
-                if k+1 == columns:
-                    house_id = " "
-                    print("¦   "+house_id+"    ", end="")
+                if k+1 == columns : print("¦   "+house_id+"   ", end="")
                 else:
                     house_id = str(bonus_houses[bonus_houses_counter]) if str(bonus_houses[bonus_houses_counter]).isnumeric() else str(bonus_houses[bonus_houses_counter])+" "
-                    print("¦   "+house_id+"   ", end="") if bonus_houses_counter>=9 else print("¦   0"+house_id+"    ", end="")
+                    print("¦   "+house_id+"   ", end="") if bonus_houses_counter>=9 else ( print("¦   0"+house_id+"   ", end="") if str(house_id).isnumeric() else print("¦   "+house_id+"   ", end="") )
                     bonus_houses_counter += 1
             counter += 1
         print()
@@ -123,7 +123,6 @@ while True:
         player_input = int(input("Player {} turn: ".format("A" if counter%2 == 0 else "B")))
         peaked.append(base_elements[player_input-1])
         base_elements[player_input-1] = "A" if counter%2 == 0 else "B"
-        row_index = ceil(player_input/rows)-1
 
         if score() == 2 : bonus_houses[horizontals.index(player_input-(2*(columns-1))-1)] = "A" if counter%2 == 0 else "B"    # write letter on top
         if score() == 4 : bonus_houses[horizontals.index(player_input-columns+1)] = "A" if counter%2 == 0 else "B"    # write letter on right
