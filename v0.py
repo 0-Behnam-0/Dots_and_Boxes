@@ -1,31 +1,35 @@
 """
-    TODO score def has bug in returning value
+    TODO create pointing system
 """
 
-rows = 3
-columns = 3
+rows = 2
+columns = 2
 
 # rows = int(input("Rows: "))
 # columns = int(input("Columns :"))
 
+# p1_name = input("The name of the FIRST player: ")
+# p2_name = input("The name of the SECOND player: ")
+
 list_size = (((rows*2)-1)*(columns-1)) + rows - 1
 
+peaked = []
+verticals = []
+availables = []
+horizontals = []
 bonus_houses = []
+base_elements = []
+
 for i in range((rows-1)*(columns-1)):
     bonus_houses.append(int(i+1))
 print(bonus_houses)
 
-
-peaked = []
-
-base_elements = []
 counter = 1
 while counter <= list_size:
     base_elements.append(counter)
+    availables.append(counter)
     counter += 1
 
-verticals = []
-horizontals = []
 counter = 0
 for k in range(((rows*2)-1)):
     if k%2 == 0:
@@ -37,31 +41,37 @@ for k in range(((rows*2)-1)):
             verticals.append(base_elements[counter])
             counter += 1
 
-# availables = base_elements.copy()
-# print(availables)
-
-
 def score():
     print(str(peaked)+" || "+str(player_input))
     print("col = "+str(columns))
     value = 0
     if (player_input in verticals):
-        if ((player_input-columns) in peaked) and ((player_input+columns-1) in peaked) and ((player_input-1) in peaked):
+        if (((player_input+columns-1) in peaked) and ((player_input+columns-1) in horizontals))          \
+        and (((player_input-columns) in peaked) and ((player_input-columns) in horizontals))             \
+        and (((player_input-1) in peaked) and ((player_input-1) in verticals))                           :
             value += 16
-        if ((player_input-columns+1) in peaked) and ((player_input+1) in peaked) and ((player_input+columns) in peaked):
+        if (((player_input-columns+1) in peaked) and ((player_input-columns+1) in horizontals))          \
+        and (((player_input+columns) in peaked) and ((player_input+columns) in horizontals))             \
+        and (((player_input+1) in peaked) and ((player_input+1) in verticals))                           :
             value += 4
     if (player_input in horizontals):
-        if ((player_input-columns) in peaked) and ((player_input-columns+1) in peaked) and ((player_input-(2*columns)+1) in peaked):
+        if (((player_input-(2*columns)+1) in peaked) and ((player_input-(2*columns)+1) in horizontals))  \
+        and (((player_input-columns+1) in peaked) and ((player_input-columns+1) in verticals))           \
+        and (((player_input-columns) in peaked) and ((player_input-columns) in verticals))               :
             value += 2
-        if ((player_input+columns) in peaked) and ((player_input+columns-1) in peaked) and ((player_input+(2*columns)-1) in peaked):
+        if (((player_input+(2*columns)-1) in peaked) and ((player_input+(2*columns)-1) in horizontals))  \
+        and (((player_input+columns-1) in peaked) and ((player_input+columns-1) in verticals))           \
+        and (((player_input+columns) in peaked) and ((player_input+columns) in verticals))               :
             value += 8
-    if value == 0: print("*** No point ***")
-    if value == 2: print("*** Point on Top ***")
-    if value == 4: print("*** Point on Right ***")
-    if value == 8: print("*** Point on Bottom ***")
-    if value == 10: print("*** Point on Top & Bottom ***")
-    if value == 16: print("*** Point on Left ***")
-    if value == 20: print("*** Point on Right & Left ***")
+
+    if value == 0  : print("*** No point ***")
+    if value == 2  : print("*** Point on Top ***")
+    if value == 4  : print("*** Point on Right ***")
+    if value == 8  : print("*** Point on Bottom ***")
+    if value == 10 : print("*** Point on Top & Bottom ***")
+    if value == 16 : print("*** Point on Left ***")
+    if value == 20 : print("*** Point on Right & Left ***")
+
     return value
 
 
@@ -109,30 +119,78 @@ def game_map():
             counter += 1
         print()
 
-
+print("Availables: "+str(availables))
+print("peaked: "+str(peaked))
 game_map()
 counter = 0
-while True:
+player_input_status = True
+while player_input_status and availables:
     print(base_elements)
     # print(availables)
     print(peaked)
 
     print()
 
-    while True:
-        player_input = int(input("Player {} turn: ".format("A" if counter%2 == 0 else "B")))
-        peaked.append(base_elements[player_input-1])
-        base_elements[player_input-1] = "A" if counter%2 == 0 else "B"
+    while True and availables:
 
-        if score() == 2 : bonus_houses[horizontals.index(player_input-(2*(columns-1))-1)] = "A" if counter%2 == 0 else "B"    # write letter on top
-        if score() == 4 : bonus_houses[horizontals.index(player_input-columns+1)] = "A" if counter%2 == 0 else "B"    # write letter on right
-        if score() == 8 : bonus_houses[horizontals.index(player_input)] = "A" if counter%2 == 0 else "B"    # write letter on bottom
-        if score() == 16 : bonus_houses[horizontals.index(player_input-columns)] = "A" if counter%2 == 0 else "B"    # write letter on left
+        count_down = 4
+        player_input_status = False
+        while True:
+            if count_down == 0 :
+                print("Request timed out!")
+                break
 
-        print("bonus_houses: "+str(bonus_houses))
-        game_map()
+            player_input = input("{}'s turn ({} chance left): ".format(("A" if counter%2 == 0 else "B"), str(count_down)))
+            
+            try : player_input = int(player_input)
+            except : pass
 
-        if score() == 0 : break
+            if (player_input in availables) and not(player_input in peaked):
+                print("{}'s input accepted.".format("A" if counter%2 == 0 else "B"))
+                player_input_status = True
+                break
+            else:
+                print("Invalid input!")
+                if not player_input :
+                    print("   -An input missing.")
+                if not(str(player_input).isnumeric()) and player_input :
+                    print("   -Input must be integer.")
+                if not((player_input in availables) or (player_input in peaked)) and str(player_input).isnumeric() :
+                    print("   -This house does not exist.")
+                if player_input in peaked :
+                    print("   -This house has already been selected.")
 
+            count_down -= 1
 
+        if player_input_status:
+            availables.remove(player_input)
+            peaked.append(player_input)
+            base_elements[player_input-1] = "A" if counter%2 == 0 else "B"
+
+            print("Availables: "+str(availables))
+            print("peaked: "+str(peaked))
+
+            value = score()
+            if value == 2  :    # write symbol on top
+                bonus_houses[horizontals.index(player_input-(2*(columns-1))-1)] = "A" if counter%2 == 0 else "B"
+            if value == 4  :    # write symbol on right
+                bonus_houses[horizontals.index(player_input-columns+1)] = "A" if counter%2 == 0 else "B"
+            if value == 8  :    # write symbol on bottom
+                bonus_houses[horizontals.index(player_input)] = "A" if counter%2 == 0 else "B"
+            if value == 10 :    # write symbol on top & bottom
+                bonus_houses[horizontals.index(player_input-(2*(columns-1))-1)] = "A" if counter%2 == 0 else "B"
+                bonus_houses[horizontals.index(player_input)] = "A" if counter%2 == 0 else "B"
+            if value == 16 :    # write symbol on left
+                bonus_houses[horizontals.index(player_input-columns)] = "A" if counter%2 == 0 else "B"
+            if value == 20 :    # write symbol on right & left
+                bonus_houses[horizontals.index(player_input-columns+1)] = "A" if counter%2 == 0 else "B"
+                bonus_houses[horizontals.index(player_input-columns)] = "A" if counter%2 == 0 else "B"
+
+            print("bonus_houses: "+str(bonus_houses))
+            game_map()
+
+            if score() == 0 : break
+
+        else : break
+    
     counter += 1
