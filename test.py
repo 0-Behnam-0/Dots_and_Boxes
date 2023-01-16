@@ -30,10 +30,26 @@ import os
 
 # Get the size
 # of the terminal
-size = os.get_terminal_size()
+size = os.get_terminal_size().columns
 
 
 # Print the size
 # of the terminal
 print(size)
 
+x = 0
+import functools
+
+@functools.lru_cache(maxsize=1)
+def once(x):
+    x += 1
+    print(x)
+    print("you are doing good, keep it up.")
+
+once(x)
+once(x)
+
+
+name = "mahdi"
+
+print("*"*len(name))
