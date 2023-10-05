@@ -103,13 +103,11 @@ def game_map():
             if str(base_elements[counter]).isnumeric():
                 if k+1 == columns : print(str(base_elements[counter])+"  "+house_id+"   ", end="") if base_elements[counter] >= 10 else print("0"+str(base_elements[counter])+"  "+house_id+"   ", end="")
                 else:
-                    """ house_id = str(bonus_houses[bonus_houses_counter]) if bonus_houses_counter>=9 else "0"+str(bonus_houses[bonus_houses_counter]) """
                     print(str(base_elements[counter])+"  "+house_id+"   ", end="") if base_elements[counter] >= 10 else print("0"+str(base_elements[counter])+"  "+house_id+"   ", end="")
                     bonus_houses_counter += 1
             else:
                 if k+1 == columns : print("¦   "+house_id+"   ", end="")
                 else:
-                    """ house_id = str(bonus_houses[bonus_houses_counter]) if str(bonus_houses[bonus_houses_counter]).isnumeric() else str(bonus_houses[bonus_houses_counter])+" " """
                     if not str(bonus_houses[bonus_houses_counter]).isnumeric() :
                         house_id = str(bonus_houses[bonus_houses_counter])+" "
                     print("¦   "+house_id+"   ", end="") if bonus_houses_counter>=9 else ( print("¦   0"+house_id+"   ", end="") if str(house_id).isnumeric() else print("¦   "+house_id+"   ", end="") )
@@ -142,23 +140,27 @@ p2_point = 0
 player_input_status = True
 while player_input_status and availables:
 
-    while True and availables:
+    while availables:
 
         count_down = 4
         player_input_status = False
         while True:
-            if count_down == 0 :
-                print("Request timed out!")
-                break
+            player_turn = p1_name if counter%2 == 0 else p2_name
+            opposite_player = False
 
-            player_input = input("{}'s turn ({} chance left): ".format((p1_name if counter%2 == 0 else p2_name), str(count_down)))
+            if count_down == 0 :
+                opposite_player = p1_name if player_turn == p2_name else p2_name
+                print("The number of requests for {} is over!".format(player_turn))
+                break
+            
+            player_input = input("{}'s turn ({} chance left): ".format((player_turn), str(count_down)))
             
             try : player_input = int(player_input)
             except : pass
 
             if (player_input in availables) and not(player_input in peaked):
                 system('cls')
-                print("{}'s input accepted.".format(p1_name if counter%2 == 0 else p2_name))
+                print("{}'s input accepted.".format(player_turn))
                 player_input_status = True
                 break
             else:
@@ -224,6 +226,8 @@ while player_input_status and availables:
 
     counter += 1
 
-if p1_point>p2_point : print(p1_name+" won.")
-if p1_point<p2_point : print(p2_name+" won.")
-if p1_point==p2_point : print("Draw")
+if p1_point > p2_point : print(p1_name+" won.")
+elif p1_point < p2_point : print(p2_name+" won.")
+elif (p1_point == p2_point) and opposite_player : print(opposite_player+" won.")
+elif p1_point == p2_point : print("Draw.")
+else : print("There was a problem in determining the winner!")
