@@ -1,20 +1,11 @@
 from os import system, get_terminal_size
 
-"""
-    TODO create pointing system
-"""
 
 window_size_columns = get_terminal_size().columns
 window_size_lines = get_terminal_size().lines
 
-# rows = 4
-# columns = 4
-
 rows = int(input("Rows: "))
 columns = int(input("Columns :"))
-
-# p1_name = "A"
-# p2_name = "B"
 
 p1_name = input("The name of the FIRST player: ")
 p2_name = input("The name of the SECOND player: ")
