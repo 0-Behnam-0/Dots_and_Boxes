@@ -1,14 +1,3 @@
-<style>
-    @font-face {
-        font-family: Font;
-        src: url('font.ttf');
-    }
-    body {
-        font-family: Font;
-        font-size: 15px;
-    }
-</style>
-
 # Dots and Boxes Game
 
 This is a Python implementation of the classic Dots and Boxes game.  
