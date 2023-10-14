@@ -7,8 +7,11 @@ window_size_lines = get_terminal_size().lines
 rows = int(input("Rows: "))
 columns = int(input("Columns :"))
 
-p1_name = input("The name of the FIRST player: ")
-p2_name = input("The name of the SECOND player: ")
+while True:
+    p1_name = input("The name of the FIRST player: ")
+    p2_name = input("The name of the SECOND player: ")
+
+    if (p1_name and p2_name): break
 
 list_size = (((rows*2)-1)*(columns-1)) + rows - 1
 
