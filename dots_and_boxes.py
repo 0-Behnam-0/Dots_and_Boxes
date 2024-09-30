@@ -5,7 +5,7 @@ window_size_columns = get_terminal_size().columns
 window_size_lines = get_terminal_size().lines
 
 rows = int(input("Rows: "))
-columns = int(input("Columns :"))
+columns = int(input("Columns: "))
 
 while True:
     p1_name = input("The name of the FIRST player: ")
