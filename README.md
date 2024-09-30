@@ -34,4 +34,4 @@ We welcome all contributions and suggestions for improving the game.
 
 ## Credits
 
-This game was created by [Mahdi Mohamadiha](https://github.com/0-Behnam-0/).
+This game was created by [Mahdi Mohammadiha](https://github.com/MahdiMohammadiha/).
